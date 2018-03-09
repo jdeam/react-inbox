@@ -119,8 +119,8 @@ class App extends React.Component {
         />
         <MessageList
           messages={ this.state.messages }
-          onSelect={ this.selectMessage }
-          onStar={ this.starMessage }
+          selectMessage={ this.selectMessage }
+          starMessage={ this.starMessage }
         />
       </div>
     );

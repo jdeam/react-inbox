@@ -1,13 +1,13 @@
 import React from 'react';
 import Message from './Message'
 
-const MessageList = ({ messages, onSelect, onStar }) => (
+const MessageList = ({ messages, selectMessage, starMessage }) => (
   <div>
     { messages.map((message, i) => <Message
       key={ i }
       message={ message }
-      onSelect={ onSelect(i) }
-      onStar={ onStar(i) }
+      selectMessage={ selectMessage(i) }
+      starMessage={ starMessage(i) }
     />)}
   </div>
 );
