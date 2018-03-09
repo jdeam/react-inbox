@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Toolbar from './components/Toolbar';
 import MessageList from './components/MessageList';
 
-class App extends Component {
+class App extends React.Component {
 
   constructor(props) {
     super(props);
@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   selectMessage = (i) => {
-    const fn = (e) => {
+    const fn = (event) => {
       let newState = [ ...this.state.messages ];
       if (newState[i].selected) delete newState[i].selected
       else newState[i].selected = true;
@@ -24,7 +24,7 @@ class App extends Component {
   }
 
   starMessage = (i) => {
-    const fn = (e) => {
+    const fn = (event) => {
       let newState = [ ...this.state.messages ];
       if (newState[i].starred) newState[i].starred = false;
       else newState[i].starred = true;
@@ -35,15 +35,15 @@ class App extends Component {
     return fn;
   }
 
-  selectAllMessages = (e) => {
-    let newState = [ ...this.state.messages ];
-    if (newState.some(message => message.selected)) {
-      newState = newState.map(message => {
+  selectAllMessages = (event) => {
+    let newState;
+    if (this.state.messages.some(message => message.selected)) {
+      newState = this.state.messages.map(message => {
         delete message.selected;
         return message;
       });
     } else {
-      newState = newState.map(message => {
+      newState = this.state.messages.map(message => {
         message.selected = true;
         return message;
       });
@@ -53,9 +53,8 @@ class App extends Component {
     });
   }
 
-  markRead = (e) => {
-    let newState = [ ...this.state.messages ];
-    newState = newState.map(message => {
+  markRead = (event) => {
+    let newState = this.state.messages.map(message => {
       if (message.selected) message.read = true;
       return message;
     });
@@ -64,9 +63,8 @@ class App extends Component {
     });
   }
 
-  markUnread = (e) => {
-    let newState = [ ...this.state.messages ];
-    newState = newState.map(message => {
+  markUnread = (event) => {
+    let newState = this.state.messages.map(message => {
       if (message.selected) message.read = false;
       return message;
     });
@@ -75,11 +73,10 @@ class App extends Component {
     });
   }
 
-  applyLabel = (e) => {
-    let newState = [ ...this.state.messages ];
-    newState = newState.map(message => {
-      if (message.selected && !message.labels.includes(e.target.value)) {
-        message.labels.push(e.target.value);
+  applyLabel = (event) => {
+    let newState = this.state.messages.map(message => {
+      if (message.selected && !message.labels.includes(event.target.value)) {
+        message.labels.push(event.target.value);
       }
       return message;
     });
@@ -88,11 +85,10 @@ class App extends Component {
     });
   }
 
-  removeLabel = (e) => {
-    let newState = [ ...this.state.messages ];
-    newState = newState.map(message => {
+  removeLabel = (event) => {
+    let newState = this.state.messages.map(message => {
       if (message.selected) {
-        message.labels = message.labels.filter(label => label !== e.target.value);
+        message.labels = message.labels.filter(label => label !== event.target.value);
       }
       return message;
     });
@@ -101,9 +97,8 @@ class App extends Component {
     });
   }
 
-  deleteMessage = (e) => {
-    let newState = [ ...this.state.messages ];
-    newState = newState.filter(message => !message.selected);
+  deleteMessage = (event) => {
+    let newState = this.state.messages.filter(message => !message.selected);
     this.setState({
       messages: newState
     });
