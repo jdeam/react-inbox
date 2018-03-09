@@ -1,5 +1,5 @@
 import React from 'react';
-import Message from './Message'
+import Message from './Message';
 
 const MessageList = ({ messages, selectMessage, starMessage }) => (
   <div>

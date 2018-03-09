@@ -4,12 +4,9 @@ import MessageList from './components/MessageList';
 
 class App extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      messages: this.props.messages
-    }
-  }
+  state = {
+    messages: this.props.messages
+  };
 
   selectMessage = (i) => {
     const fn = (event) => {
@@ -21,7 +18,7 @@ class App extends React.Component {
       });
     };
     return fn;
-  }
+  };
 
   starMessage = (i) => {
     const fn = (event) => {
@@ -33,7 +30,7 @@ class App extends React.Component {
       });
     };
     return fn;
-  }
+  };
 
   selectAllMessages = (event) => {
     let newState;
@@ -51,7 +48,7 @@ class App extends React.Component {
     this.setState({
       messages: newState
     });
-  }
+  };
 
   markRead = (event) => {
     let newState = this.state.messages.map(message => {
@@ -61,7 +58,7 @@ class App extends React.Component {
     this.setState({
       messages: newState
     });
-  }
+  };
 
   markUnread = (event) => {
     let newState = this.state.messages.map(message => {
@@ -71,7 +68,7 @@ class App extends React.Component {
     this.setState({
       messages: newState
     });
-  }
+  };
 
   applyLabel = (event) => {
     let newState = this.state.messages.map(message => {
@@ -83,7 +80,7 @@ class App extends React.Component {
     this.setState({
       messages: newState
     });
-  }
+  };
 
   removeLabel = (event) => {
     let newState = this.state.messages.map(message => {
@@ -95,14 +92,14 @@ class App extends React.Component {
     this.setState({
       messages: newState
     });
-  }
+  };
 
   deleteMessage = (event) => {
     let newState = this.state.messages.filter(message => !message.selected);
     this.setState({
       messages: newState
     });
-  }
+  };
 
   render() {
     return (
@@ -125,6 +122,7 @@ class App extends React.Component {
       </div>
     );
   }
+
 }
 
 export default App;
