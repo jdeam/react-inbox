@@ -58,7 +58,7 @@ const Toolbar = ({
           className="form-control label-select"
           disabled={ disabledStatus }
           onChange={ applyLabel }
-          value= { defaultValue }
+          value={ defaultValue }
         >
           <option>Apply label</option>
           <option value="dev">dev</option>
