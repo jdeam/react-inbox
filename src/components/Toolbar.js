@@ -8,7 +8,8 @@ const Toolbar = ({
   applyLabel,
   removeLabel,
   deleteMessage,
-  defaultValue
+  defaultValue,
+  toggleComposeForm
  }) => {
 
   const numSelected = messages.reduce((numSelected, message) => {
@@ -33,6 +34,10 @@ const Toolbar = ({
           <span className="badge badge">{ numUnread }</span>
           unread {numUnread===1?"message":"messages"}
         </p>
+
+        <a className="btn btn-danger" onClick={ toggleComposeForm }>
+          <i className="fa fa-plus"></i>
+        </a>
 
         <button className="btn btn-default" onClick={ selectAll }>
           <i className={ selectBoxStatus }></i>

@@ -6,7 +6,6 @@ import 'font-awesome/css/font-awesome.css';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import messages from './seeds/messages';
 
-ReactDOM.render(<App messages={ messages }/>, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
