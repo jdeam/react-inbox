@@ -13,6 +13,10 @@ class ComposeForm extends React.Component {
     if (newMessage.subject && newMessage.body) {
       this.props.sendMessage(newMessage);
     }
+    this.setState({
+      subject: "",
+      body: ""
+    });
   }
 
   updateSubject = (event) => {
@@ -48,6 +52,7 @@ class ComposeForm extends React.Component {
               placeholder="Enter a subject"
               name="subject"
               onChange={ this.updateSubject }
+              value={ this.state.subject }
             />
           </div>
         </div>
@@ -59,6 +64,7 @@ class ComposeForm extends React.Component {
               id="body"
               className="form-control"
               onChange={ this.updateBody }
+              value={ this.state.body }
             ></textarea>
           </div>
         </div>
