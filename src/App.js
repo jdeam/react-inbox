@@ -242,6 +242,7 @@ class App extends React.Component {
   };
 
   sendMessage = async (event) => {
+    event.preventDefault();
     const message = this.state.composeFormContent;
     if (!message.subject || !message.body) return;
     const response = await fetch(`${BaseURL}/api/messages`, {
