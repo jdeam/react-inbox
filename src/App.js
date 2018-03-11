@@ -9,7 +9,11 @@ class App extends React.Component {
   state = {
     messages: [],
     fetchingMessages: true,
-    displayComposeForm: false
+    displayComposeForm: false,
+    composeFormContent: {
+      subject: '',
+      body: ''
+    }
   };
 
   componentDidMount = async () => {
@@ -23,7 +27,13 @@ class App extends React.Component {
 
   toggleComposeForm = () => {
     if (this.state.displayComposeForm) {
-      this.setState({ displayComposeForm: false });
+      this.setState({
+        displayComposeForm: false,
+        composeFormContent: {
+          subject: '',
+          body: ''
+        }
+      });
     } else {
       this.setState({ displayComposeForm: true });
     }
@@ -213,7 +223,27 @@ class App extends React.Component {
     }
   };
 
-  sendMessage = async (message) => {
+  updateSubject = (event) => {
+    this.setState({
+      composeFormContent: {
+        ...this.state.composeFormContent,
+        subject: event.target.value
+      }
+    });
+  };
+
+  updateBody = (event) => {
+    this.setState({
+      composeFormContent: {
+        ...this.state.composeFormContent,
+        body: event.target.value
+      }
+    });
+  };
+
+  sendMessage = async (event) => {
+    const message = this.state.composeFormContent;
+    if (!message.subject || !message.body) return;
     const response = await fetch(`${BaseURL}/api/messages`, {
       method: 'POST',
       body: JSON.stringify(message),
@@ -225,7 +255,11 @@ class App extends React.Component {
     const newMessage = await response.json();
     this.setState({
       messages: [ ...this.state.messages, newMessage ],
-      displayComposeForm: false
+      displayComposeForm: false,
+      composeFormContent: {
+        subject: '',
+        body: ''
+      }
     });
   }
 
@@ -245,6 +279,9 @@ class App extends React.Component {
         />
         <ComposeForm
           display={ this.state.displayComposeForm }
+          content={ this.state.composeFormContent }
+          updateSubject={ this.updateSubject }
+          updateBody={ this.updateBody }
           sendMessage={ this.sendMessage }
         />
         <MessageList
