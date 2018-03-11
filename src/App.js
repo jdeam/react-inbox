@@ -2,40 +2,49 @@ import React from 'react';
 import Toolbar from './components/Toolbar';
 import ComposeForm from './components/ComposeForm';
 import MessageList from './components/MessageList';
+import axios from 'axios';
 const BaseURL = 'http://localhost:8082';
 
 class App extends React.Component {
 
   state = {
     messages: [],
-    fetchingMessages: true,
-    displayComposeForm: false,
-    composeFormContent: {
-      subject: '',
-      body: ''
+    composeForm: {
+      display: false,
+      content: {
+        subject: '',
+        body: ''
+      }
     }
   };
 
   componentDidMount = async () => {
-    const messagesResponse = await fetch(`${BaseURL}/api/messages`);
-    const messagesJson = await messagesResponse.json();
-    this.setState({
-      messages: messagesJson._embedded.messages,
-      fetchingMessages: false
-    });
+    const response = await axios.get(`${BaseURL}/api/messages`);
+    const messages = response.data._embedded.messages;
+    this.setState({ messages });
   };
 
   toggleComposeForm = () => {
-    if (this.state.displayComposeForm) {
+    if (this.state.composeForm.display) {
       this.setState({
-        displayComposeForm: false,
-        composeFormContent: {
-          subject: '',
-          body: ''
+        composeForm: {
+          display: false,
+          content: {
+            subject: '',
+            body: ''
+          }
         }
       });
     } else {
-      this.setState({ displayComposeForm: true });
+      this.setState({
+        composeForm: {
+          display: true,
+          content: {
+            subject: '',
+            body: ''
+          }
+        }
+      });
     }
   };
 
@@ -57,14 +66,7 @@ class App extends React.Component {
         command: 'star',
         star: !this.state.messages[i].starred
       };
-      const response = await fetch(`${BaseURL}/api/messages`, {
-        method: 'PATCH',
-        body: JSON.stringify(starBody),
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        }
-      });
+      const response = await axios.patch(`${BaseURL}/api/messages`, starBody);
       if (response.status === 200) {
         let newState = [ ...this.state.messages ];
         newState[i].starred = !newState[i].starred;
@@ -94,19 +96,8 @@ class App extends React.Component {
     const messageIds = this.state.messages.reduce((ids, message) => {
       return message.selected?[ ...ids, message.id ]:ids;
     }, []);
-    const readBody = {
-      messageIds,
-      command: 'read',
-      read: true
-    };
-    const response = await fetch(`${BaseURL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(readBody),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    });
+    const readBody = { messageIds, command: 'read', read: true };
+    const response = await axios.patch(`${BaseURL}/api/messages`, readBody);
     if (response.status === 200) {
       const newState = this.state.messages.map(message => {
         if (messageIds.includes(message.id)) message.read = true;
@@ -120,19 +111,8 @@ class App extends React.Component {
     const messageIds = this.state.messages.reduce((ids, message) => {
       return message.selected?[ ...ids, message.id ]:ids;
     }, []);
-    const unreadBody = {
-      messageIds,
-      command: 'read',
-      read: false
-    };
-    const response = await fetch(`${BaseURL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(unreadBody),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    });
+    const unreadBody = { messageIds, command: 'read', read: false };
+    const response = await axios.patch(`${BaseURL}/api/messages`, unreadBody);
     if (response.status === 200) {
       const newState = this.state.messages.map(message => {
         if (messageIds.includes(message.id)) message.read = false;
@@ -147,29 +127,14 @@ class App extends React.Component {
     const messageIds = this.state.messages.reduce((ids, message) => {
       return message.selected?[ ...ids, message.id ]:ids;
     }, []);
-    const applyBody = {
-      messageIds,
-      label,
-      command: 'addLabel',
-    };
-    const response = await fetch(`${BaseURL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(applyBody),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    });
+    const applyBody = { messageIds, label, command: 'addLabel' };
+    const response = await axios.patch(`${BaseURL}/api/messages`, applyBody);
     if (response.status === 200) {
       const newState = this.state.messages.map(message => {
-        if (message.selected && !message.labels.includes(label)) {
-          message.labels.push(label);
-        }
+        if (message.selected && !message.labels.includes(label)) message.labels.push(label);
         return message;
       });
-      this.setState({
-        messages: newState
-      });
+      this.setState({ messages: newState });
     }
   };
 
@@ -178,19 +143,8 @@ class App extends React.Component {
     const messageIds = this.state.messages.reduce((ids, message) => {
       return message.selected?[ ...ids, message.id ]:ids;
     }, []);
-    const removeBody = {
-      messageIds,
-      label,
-      command: 'removeLabel',
-    };
-    const response = await fetch(`${BaseURL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(removeBody),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    });
+    const removeBody = { messageIds, label, command: 'removeLabel' };
+    const response = await axios.patch(`${BaseURL}/api/messages`, removeBody);
     if (response.status === 200) {
       const newState = this.state.messages.map(message => {
         if (message.selected) {
@@ -198,9 +152,7 @@ class App extends React.Component {
         }
         return message;
       });
-      this.setState({
-        messages: newState
-      });
+      this.setState({ messages: newState });
     }
   };
 
@@ -209,14 +161,7 @@ class App extends React.Component {
       return message.selected?[ ...ids, message.id ]:ids;
     }, []);
     const deleteBody = { messageIds, command: 'delete' }
-    const response = await fetch(`${BaseURL}/api/messages`, {
-      method: 'PATCH',
-      body: JSON.stringify(deleteBody),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    });
+    const response = await axios.patch(`${BaseURL}/api/messages`, deleteBody);
     if (response.status === 200) {
       const newState = this.state.messages.filter(message => !messageIds.includes(message.id));
       this.setState({ messages: newState });
@@ -225,41 +170,42 @@ class App extends React.Component {
 
   updateSubject = (event) => {
     this.setState({
-      composeFormContent: {
-        ...this.state.composeFormContent,
-        subject: event.target.value
+      composeForm: {
+        display: true,
+        content: {
+          ...this.state.composeForm.content,
+          subject: event.target.value
+        }
       }
     });
   };
 
   updateBody = (event) => {
     this.setState({
-      composeFormContent: {
-        ...this.state.composeFormContent,
-        body: event.target.value
+      composeForm: {
+        display: true,
+        content: {
+          ...this.state.composeForm.content,
+          body: event.target.value
+        }
       }
     });
   };
 
   sendMessage = async (event) => {
     event.preventDefault();
-    const message = this.state.composeFormContent;
+    const message = this.state.composeForm.content;
     if (!message.subject || !message.body) return;
-    const response = await fetch(`${BaseURL}/api/messages`, {
-      method: 'POST',
-      body: JSON.stringify(message),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      }
-    });
-    const newMessage = await response.json();
+    const response = await axios.post(`${BaseURL}/api/messages`, message);
+    const newMessage = response.data;
     this.setState({
       messages: [ ...this.state.messages, newMessage ],
-      displayComposeForm: false,
-      composeFormContent: {
-        subject: '',
-        body: ''
+      composeForm: {
+        display: false,
+        content: {
+          subject: '',
+          body: ''
+        }
       }
     });
   }
@@ -279,8 +225,8 @@ class App extends React.Component {
           defaultValue="default"
         />
         <ComposeForm
-          display={ this.state.displayComposeForm }
-          content={ this.state.composeFormContent }
+          display={ this.state.composeForm.display }
+          content={ this.state.composeForm.content }
           updateSubject={ this.updateSubject }
           updateBody={ this.updateBody }
           sendMessage={ this.sendMessage }
