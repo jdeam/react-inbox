@@ -8,8 +8,8 @@ const Toolbar = ({
   applyLabel,
   removeLabel,
   deleteMessage,
-  defaultValue,
-  toggleComposeForm
+  toggleComposeForm,
+  defaultValue
  }) => {
 
   const numSelected = messages.reduce((numSelected, message) => {

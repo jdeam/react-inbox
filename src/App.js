@@ -194,7 +194,7 @@ class App extends React.Component {
     if (response.status === 200) {
       const newState = this.state.messages.map(message => {
         if (message.selected) {
-          message.labels = message.labels.filter(lab => lab !== label);
+          message.labels = message.labels.filter(el => el !== label);
         }
         return message;
       });
@@ -275,8 +275,8 @@ class App extends React.Component {
           applyLabel={ this.applyLabel }
           removeLabel={ this.removeLabel }
           deleteMessage={ this.deleteMessage }
-          defaultValue="default"
           toggleComposeForm={ this.toggleComposeForm }
+          defaultValue="default"
         />
         <ComposeForm
           display={ this.state.displayComposeForm }
