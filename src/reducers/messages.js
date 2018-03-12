@@ -36,14 +36,14 @@ function messages(state = { messages: [] }, action) {
       };
     case SELECTED_ALL_MESSAGES:
       let newState;
-      if (action.selected) {
+      if (this.state.messages.some(message => message.selected)) {
         newState = this.state.messages.map(message => {
-          message.selected = true;
+          if (message.selected) delete message.selected;
           return message;
         });
       } else {
         newState = this.state.messages.map(message => {
-          if (message.selected) delete message.selected;
+          message.selected = true;
           return message;
         });
       }
@@ -70,8 +70,8 @@ function messages(state = { messages: [] }, action) {
         messages: newState
       };
     case APPLIED_LABEL:
-      const ids = action.apply.ids;
-      const label = action.apply.label;
+      const ids = action.ids;
+      const label = action.label;
       const newState = this.state.messages.map(message => {
         if (ids.includes(message.id) && !message.labels.includes(label)) {
           message.labels.push(label);
@@ -83,8 +83,8 @@ function messages(state = { messages: [] }, action) {
         messages: newState
       };
     case REMOVED_LABEL:
-      const ids = action.remove.ids;
-      const label = action.remove.label;
+      const ids = action.ids;
+      const label = action.label;
       const newState = this.state.messages.map(message => {
         if (ids.includes(message.id)) {
           message.labels = message.labels.filter(el => el !== label);
@@ -107,7 +107,7 @@ function messages(state = { messages: [] }, action) {
         ...state,
         messages: [
           ...state.messages,
-          action.message
+          action.newMessage
         ]
       };
     default:

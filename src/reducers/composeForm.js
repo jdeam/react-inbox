@@ -2,7 +2,6 @@ import {
   TOGGLED_COMPOSE_FORM,
   UPDATED_FORM_SUBJECT,
   UPDATED_FORM_BODY,
-  CLEARED_COMPOSE_FORM
 } from '../actions';
 
 const initialFormState = { display: false, content: { subject: '', body: '' } };
@@ -10,18 +9,17 @@ const initialFormState = { display: false, content: { subject: '', body: '' } };
 function composeForm(state = initialFormState, action) {
   switch(action.type) {
     case TOGGLED_COMPOSE_FORM:
-      if (action.toggle) {
+      if (this.state.display) {
         return {
-          ...this.state,
-          display: true
-        };
-      } else {
-        return {
-          ...this.state,
           display: false,
-          content: { subject: '', body: ''}
+          content: { subject: '', body: '' }
         }
       }
+      return {
+        ...this.state,
+        display: true
+      };
+
     case UPDATED_FORM_SUBJECT:
       return {
         ...this.state,
@@ -36,14 +34,6 @@ function composeForm(state = initialFormState, action) {
         content: {
           ...this.state.content,
           body: action.body
-        }
-      };
-    case CLEARED_COMPOSE_FORM:
-      return {
-        ...this.state,
-        content: {
-          subject: '',
-          body: ''
         }
       };
     default:

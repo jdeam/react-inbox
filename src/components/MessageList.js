@@ -24,7 +24,7 @@ const Message = ({ message, selectMessage, starMessage }) => (
         </div>
         <div className="col-xs-2">
           <i
-            className={ message.starred?"star fa fa-star":"star fa fa-star-o"}
+            className={ message.starred?"star fa fa-star":"star fa fa-star-o" }
             onClick={ starMessage }
             ></i>
         </div>
