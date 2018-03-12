@@ -7,25 +7,25 @@ const Toolbar = ({
   markUnread,
   applyLabel,
   removeLabel,
-  deleteMessage,
+  deleteMessages,
   toggleComposeForm,
   defaultValue
  }) => {
 
-  const numSelected = messages.reduce((numSelected, message) => {
-     return message.selected?numSelected+1:numSelected;
-  }, 0);
+  const selectedIds = messages.reduce((arr, message) => {
+     return message.selected?[ ...arr, message.id]:arr;
+  }, []);
 
-  const numUnread = messages.reduce((numUnread, message) => {
-     return !message.read?numUnread+1:numUnread;
+  const numUnread = messages.reduce((num, message) => {
+     return !message.read?num+1:num;
   }, 0);
 
   let selectBoxStatus;
-  if (!numSelected) selectBoxStatus = "fa fa-square-o";
-  else if (numSelected < messages.length) selectBoxStatus = "fa fa-minus-square-o";
+  if (!selectedIds.length) selectBoxStatus = "fa fa-square-o";
+  else if (selectedIds.length < messages.length) selectBoxStatus = "fa fa-minus-square-o";
   else selectBoxStatus = "fa fa-check-square-o";
 
-  const disabledStatus = numSelected?"":"disabled";
+  const disabledStatus = selectedIds.length?"":"disabled";
 
   return (
     <div className="row toolbar">
@@ -46,7 +46,7 @@ const Toolbar = ({
         <button
           className="btn btn-default"
           disabled={ disabledStatus }
-          onClick={ markRead }
+          onClick={ () => { markRead(selectedIds) } }
         >
           Mark As Read
         </button>
@@ -54,7 +54,7 @@ const Toolbar = ({
         <button
           className="btn btn-default"
           disabled={ disabledStatus }
-          onClick={ markUnread }
+          onClick={ () => { markUnread(selectedIds) } }
         >
           Mark As Unread
         </button>
@@ -62,7 +62,9 @@ const Toolbar = ({
         <select
           className="form-control label-select"
           disabled={ disabledStatus }
-          onChange={ applyLabel }
+          onChange={ (event) => {
+            applyLabel(selectedIds, event.target.value);
+          } }
           value={ defaultValue }
         >
           <option>Apply label</option>
@@ -74,7 +76,9 @@ const Toolbar = ({
         <select
           className="form-control label-select"
           disabled={ disabledStatus }
-          onChange={ removeLabel }
+          onChange={ (event) => {
+            removeLabel(selectedIds, event.target.value);
+          } }
           value={ defaultValue }
         >
           <option>Remove label</option>
@@ -86,7 +90,7 @@ const Toolbar = ({
         <button
           className="btn btn-default"
           disabled={ disabledStatus }
-          onClick={ deleteMessage }
+          onClick={ () => { deleteMessages(selectedIds) } }
         >
           <i className="fa fa-trash-o"></i>
         </button>

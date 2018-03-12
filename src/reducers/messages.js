@@ -11,105 +11,85 @@ import {
   MESSAGE_CREATED
 } from '../actions';
 
-function messages(state = { messages: [] }, action) {
+function messages(state = [], action) {
   switch (action.type) {
-    case MESSAGES_RECEIVED:
-      return {
-        ...state,
-        messages: action.messages
-      };
-    case SELECTED_SINGLE_MESSAGE:
-      const newState = [ ...this.state.messages ];
-      if (newState[action.id].selected) delete newState[action.id].selected;
-      else newState[action.id].selected = true;
-      return {
-        ...state,
-        messages: newState
-      };
-    case STARRED_SINGLE_MESSAGE:
-      const newState = [ ...this.state.messages ];
-      if (newState[action.id].starred) newState[action.id].starred = false;
-      else newState[action.id].starred = true;
-      return {
-        ...state,
-        messages: newState
-      };
-    case SELECTED_ALL_MESSAGES:
+    case MESSAGES_RECEIVED: {
+      return action.messages;
+    }
+    case SELECTED_SINGLE_MESSAGE: {
+      const newState = [ ...state ];
+      const i = newState.findIndex(message => message.id === action.id)
+      if (newState[i].selected) delete newState[i].selected;
+      else newState[i].selected = true;
+      return newState;
+    }
+    case STARRED_SINGLE_MESSAGE: {
+      const newState = [ ...state ];
+      const i = newState.findIndex(message => message.id === action.id)
+      if (newState[i].starred) newState[i].starred = false;
+      else newState[i].starred = true;
+      return newState;
+    }
+    case SELECTED_ALL_MESSAGES: {
       let newState;
-      if (this.state.messages.some(message => message.selected)) {
-        newState = this.state.messages.map(message => {
+      if (state.some(message => message.selected)) {
+        newState = state.map(message => {
           if (message.selected) delete message.selected;
           return message;
         });
       } else {
-        newState = this.state.messages.map(message => {
+        newState = state.map(message => {
           message.selected = true;
           return message;
         });
       }
-      return {
-        ...state,
-        messages: newState
-      };
-    case MARKED_READ:
-      const newState = this.state.messages.map(message => {
+      return newState;
+    }
+    case MARKED_READ: {
+      const newState = state.map(message => {
         if (action.ids.includes(message.id)) message.read = true;
         return message;
       });
-      return {
-        ...this.state,
-        messages: newState
-      };
-    case MARKED_UNREAD:
-      const newState = this.state.messages.map(message => {
+      return newState;
+    }
+    case MARKED_UNREAD: {
+      const newState = state.map(message => {
         if (action.ids.includes(message.id)) message.read = false;
         return message;
       });
-      return {
-        ...this.state,
-        messages: newState
-      };
-    case APPLIED_LABEL:
+      return newState;
+    }
+    case APPLIED_LABEL: {
       const ids = action.ids;
       const label = action.label;
-      const newState = this.state.messages.map(message => {
+      const newState = state.map(message => {
         if (ids.includes(message.id) && !message.labels.includes(label)) {
           message.labels.push(label);
         }
         return message;
       });
-      return {
-        ...this.state,
-        messages: newState
-      };
-    case REMOVED_LABEL:
+      return newState;
+    }
+    case REMOVED_LABEL: {
       const ids = action.ids;
       const label = action.label;
-      const newState = this.state.messages.map(message => {
+      const newState = state.map(message => {
         if (ids.includes(message.id)) {
           message.labels = message.labels.filter(el => el !== label);
         }
+        return message;
       });
-      return {
-        ...this.state,
-        messages: newState
-      };
-    case DELETED_MESSAGE:
-      const newState = this.state.messages.filter(message => {
+      return newState;
+    }
+    case DELETED_MESSAGE: {
+      const newState = state.filter(message => {
         return !action.ids.includes(message.id);
       });
-      return {
-        ...this.state,
-        messages: newState
-      };
-    case MESSAGE_CREATED:
-      return {
-        ...state,
-        messages: [
-          ...state.messages,
-          action.newMessage
-        ]
-      };
+      return newState;
+    }
+    case MESSAGE_CREATED: {
+      return [ ...state, action.newMessage ];
+    }
     default:
       return state;
   }

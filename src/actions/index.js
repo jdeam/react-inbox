@@ -16,7 +16,7 @@ export function updateFormSubject(subject) {
 }
 
 export const UPDATED_FORM_BODY = 'UPDATED_FORM_BODY';
-export function updateFormBody() {
+export function updateFormBody(body) {
   return (dispatch) => {
     dispatch({ type: UPDATED_FORM_BODY, body });
   }
@@ -142,8 +142,9 @@ export function createMessage(subject, body) {
   return async (dispatch) => {
     if (!subject || !body) return;
     const message = { subject, body };
-    const response = axios.post(`${BaseURL}/api/messages`, message);
+    const response = await axios.post(`${BaseURL}/api/messages`, message);
     const newMessage = response.data;
+    console.log(newMessage);
     dispatch({ type: MESSAGE_CREATED, newMessage });
     dispatch({ type: TOGGLED_COMPOSE_FORM });
   }

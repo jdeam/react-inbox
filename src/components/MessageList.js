@@ -2,11 +2,15 @@ import React from 'react';
 
 const MessageList = ({ messages, selectMessage, starMessage }) => (
   <div>
-    { messages.map((message, i) => <Message
-      key={ i }
+    { messages.map(message => <Message
+      key={ message.id }
       message={ message }
-      selectMessage={ selectMessage(i) }
-      starMessage={ starMessage(i) }
+      selectMessage={ (event) => {
+        selectMessage(message.id);
+      } }
+      starMessage={ (event) => {
+        starMessage(message.id, event.target.className);
+      } }
     />)}
   </div>
 );

@@ -25,7 +25,9 @@ const ComposeForm = ({
           id="subject"
           placeholder="Enter a subject"
           name="subject"
-          onChange={ updateSubject }
+          onChange={ (event) => {
+            updateSubject(event.target.value);
+          } }
           value={ content.subject }
         />
       </div>
@@ -37,7 +39,9 @@ const ComposeForm = ({
           name="body"
           id="body"
           className="form-control"
-          onChange={ updateBody }
+          onChange={ (event) => {
+            updateBody(event.target.value);
+          } }
           value={ content.body }
         ></textarea>
       </div>
@@ -48,7 +52,10 @@ const ComposeForm = ({
           type="submit"
           value="Send"
           className="btn btn-primary"
-          onClick={ sendMessage }
+          onClick={ (event) => {
+            event.preventDefault();
+            sendMessage(content.subject, content.body);
+          } }
         />
       </div>
     </div>
