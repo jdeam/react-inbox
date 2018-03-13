@@ -2,17 +2,24 @@ import axios from 'axios';
 const BaseURL = 'http://localhost:8082';
 
 export const UPDATED_FORM_SUBJECT = 'UPDATED_FORM_SUBJECT';
-export function updateFormSubject(subject) {
+export function updateSubject(subject) {
   return (dispatch) => {
     dispatch({ type: UPDATED_FORM_SUBJECT, subject });
-  }
+  };
 }
 
 export const UPDATED_FORM_BODY = 'UPDATED_FORM_BODY';
-export function updateFormBody(body) {
+export function updateBody(body) {
   return (dispatch) => {
     dispatch({ type: UPDATED_FORM_BODY, body });
-  }
+  };
+}
+
+export const CLEARED_FORM = 'CLEARED_FORM';
+export function clearForm() {
+  return (dispatch) => {
+    dispatch({ type: CLEARED_FORM });
+  };
 }
 
 export const MESSAGES_RECEIVED = 'MESSAGES_RECEIVED';
@@ -24,18 +31,18 @@ export function fetchMessages() {
       type: MESSAGES_RECEIVED,
       messages
     });
-  }
+  };
 }
 
 export const SELECTED_SINGLE_MESSAGE = 'SELECTED_SINGLE_MESSAGE';
-export function selectSingleMessage(id) {
+export function selectMessage(id) {
   return (dispatch) => {
     dispatch({ type: SELECTED_SINGLE_MESSAGE, id });
   };
 }
 
 export const STARRED_SINGLE_MESSAGE = 'STARRED_SINGLE_MESSAGE';
-export function starSingleMessage(id, starStatus) {
+export function starMessage(id, starStatus) {
   return async (dispatch) => {
     const starBody = {
       messageIds: [ id ],
@@ -46,14 +53,14 @@ export function starSingleMessage(id, starStatus) {
     if (response.status === 200) {
       dispatch({ type: STARRED_SINGLE_MESSAGE, id });
     }
-  }
+  };
 }
 
 export const SELECTED_ALL_MESSAGES = 'SELECTED_ALL_MESSAGES';
-export function selectAllMessages() {
+export function selectAll() {
   return (dispatch) => {
     dispatch({ type: SELECTED_ALL_MESSAGES });
-  }
+  };
 }
 
 export const MARKED_READ = 'MARKED_READ';
@@ -68,7 +75,7 @@ export function markRead(ids) {
     if (response.status === 200) {
       dispatch({ type: MARKED_READ, ids })
     }
-  }
+  };
 }
 
 export const MARKED_UNREAD = 'MARKED_UNREAD';
@@ -83,7 +90,7 @@ export function markUnread(ids) {
     if (response.status === 200) {
       dispatch({ type: MARKED_UNREAD, ids })
     }
-  }
+  };
 }
 
 export const APPLIED_LABEL = 'APPLIED_LABEL';
@@ -98,7 +105,7 @@ export function applyLabel(ids, label) {
     if (response.status === 200) {
       dispatch({ type: APPLIED_LABEL, ids, label });
     }
-  }
+  };
 }
 
 export const REMOVED_LABEL = 'REMOVED_LABEL';
@@ -113,7 +120,7 @@ export function removeLabel(ids, label) {
     if (response.status === 200) {
       dispatch({ type: REMOVED_LABEL, ids, label });
     }
-  }
+  };
 }
 
 export const DELETED_MESSAGE = 'DELETED_MESSAGE';
@@ -127,7 +134,7 @@ export function deleteMessages(ids) {
     if (response.status === 200) {
       dispatch({ type: DELETED_MESSAGE, ids });
     }
-  }
+  };
 }
 
 export const MESSAGE_CREATED = 'MESSAGE_CREATED';
@@ -139,5 +146,16 @@ export function createMessage(subject, body) {
     const newMessage = response.data;
     console.log(newMessage);
     dispatch({ type: MESSAGE_CREATED, newMessage });
-  }
+    dispatch({ type: CLEARED_FORM });
+  };
+}
+
+export const EXPANDED_MESSAGE = 'EXPANDED_MESSAGE';
+export function fetchBody(id) {
+  return async (dispatch) => {
+    const response = await axios.get(`${BaseURL}/api/messages/${id}`);
+    const body = response.data.body;
+    dispatch({ type: EXPANDED_MESSAGE, body });
+    markRead([ id ])(dispatch);
+  };
 }

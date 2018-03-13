@@ -11,7 +11,9 @@ import {
   DELETED_MESSAGE,
   MESSAGE_CREATED,
   UPDATED_FORM_SUBJECT,
-  UPDATED_FORM_BODY
+  UPDATED_FORM_BODY,
+  CLEARED_FORM,
+  EXPANDED_MESSAGE
 } from '../actions';
 
 function messages(state = [], action) {
@@ -110,6 +112,20 @@ function composeForm(state = { subject: '', body: '' }, action) {
         ...state,
         body: action.body
       };
+    case CLEARED_FORM:
+      return {
+        subject: '',
+        body: ''
+      };
+    default:
+      return state;
+  }
+}
+
+function messageBody(state = '', action) {
+  switch(action.type) {
+    case EXPANDED_MESSAGE:
+      return action.body;
     default:
       return state;
   }
@@ -117,5 +133,6 @@ function composeForm(state = { subject: '', body: '' }, action) {
 
 export default combineReducers({
   messages,
-  composeForm
+  composeForm,
+  messageBody
 });

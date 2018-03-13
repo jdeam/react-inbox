@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import {
-  selectAllMessages,
+  selectAll,
   markRead,
   markUnread,
   applyLabel,
   removeLabel,
   deleteMessages,
+  clearForm
 } from '../actions';
 
 const Toolbar = ({
@@ -19,7 +20,9 @@ const Toolbar = ({
   applyLabel,
   removeLabel,
   deleteMessages,
- }) => {
+  clearForm,
+  location
+}) => {
 
   const selectedIds = messages.reduce((arr, message) => {
      return message.selected?[ ...arr, message.id]:arr;
@@ -41,10 +44,14 @@ const Toolbar = ({
       <div className="col-md-12">
         <p className="pull-right">
           <span className="badge badge">{ numUnread }</span>
-          unread {numUnread===1?"message":"messages"}
+          unread { numUnread===1?"message":"messages" }
         </p>
 
-        <Link to="/compose" className="btn btn-danger">
+        <Link
+          to={ location.pathname==="/compose"?"/":"/compose" }
+          className="btn btn-danger"
+          onClick={ location.pathname==="/compose"?clearForm:null }
+        >
           <i className="fa fa-plus"></i>
         </Link>
 
@@ -111,15 +118,16 @@ const Toolbar = ({
 const mapStateToProps = (state) => ({ messages: state.messages });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  selectAll: selectAllMessages,
-  markRead: markRead,
-  markUnread: markUnread,
-  applyLabel: applyLabel,
-  removeLabel: removeLabel,
-  deleteMessages: deleteMessages,
+  selectAll,
+  markRead,
+  markUnread,
+  applyLabel,
+  removeLabel,
+  deleteMessages,
+  clearForm
 }, dispatch);
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Toolbar);
+)(Toolbar));
