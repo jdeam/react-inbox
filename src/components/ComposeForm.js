@@ -4,16 +4,13 @@ import { bindActionCreators } from 'redux';
 import { updateFormSubject, updateFormBody, createMessage } from '../actions';
 
 const ComposeForm = ({
-  display,
-  content,
+  subject,
+  body,
   updateSubject,
   updateBody,
-  sendMessage
+  createMessage
 }) => (
-  <form
-    className="form-horizontal well"
-    style={ display?{ "display": "block" }:{ "display": "none" } }
-  >
+  <form className="form-horizontal well">
     <div className="form-group">
       <div className="col-sm-8 col-sm-offset-2">
         <h4>Compose Message</h4>
@@ -31,7 +28,7 @@ const ComposeForm = ({
           onChange={ (event) => {
             updateSubject(event.target.value);
           } }
-          value={ content.subject }
+          value={ subject }
         />
       </div>
     </div>
@@ -45,7 +42,7 @@ const ComposeForm = ({
           onChange={ (event) => {
             updateBody(event.target.value);
           } }
-          value={ content.body }
+          value={ body }
         ></textarea>
       </div>
     </div>
@@ -57,7 +54,7 @@ const ComposeForm = ({
           className="btn btn-primary"
           onClick={ (event) => {
             event.preventDefault();
-            sendMessage(content.subject, content.body);
+            createMessage(subject, body);
           } }
         />
       </div>
@@ -66,8 +63,8 @@ const ComposeForm = ({
 );
 
 const mapStateToProps = (state) => ({
-  display: state.composeForm.display,
-  content: state.composeForm.content
+  subject: state.composeForm.subject,
+  body: state.composeForm.body
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

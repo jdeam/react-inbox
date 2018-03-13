@@ -1,13 +1,6 @@
 import axios from 'axios';
 const BaseURL = 'http://localhost:8082';
 
-export const TOGGLED_COMPOSE_FORM = 'TOGGLED_COMPOSE_FORM';
-export function toggleComposeForm() {
-  return (dispatch) => {
-    dispatch({ type: TOGGLED_COMPOSE_FORM });
-  }
-}
-
 export const UPDATED_FORM_SUBJECT = 'UPDATED_FORM_SUBJECT';
 export function updateFormSubject(subject) {
   return (dispatch) => {
@@ -146,6 +139,5 @@ export function createMessage(subject, body) {
     const newMessage = response.data;
     console.log(newMessage);
     dispatch({ type: MESSAGE_CREATED, newMessage });
-    dispatch({ type: TOGGLED_COMPOSE_FORM });
   }
 }

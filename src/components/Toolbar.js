@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 import {
-  toggleComposeForm,
   selectAllMessages,
   markRead,
   markUnread,
@@ -19,7 +19,6 @@ const Toolbar = ({
   applyLabel,
   removeLabel,
   deleteMessages,
-  toggleComposeForm
  }) => {
 
   const selectedIds = messages.reduce((arr, message) => {
@@ -45,9 +44,9 @@ const Toolbar = ({
           unread {numUnread===1?"message":"messages"}
         </p>
 
-        <a className="btn btn-danger" onClick={ toggleComposeForm }>
+        <Link to="/compose" className="btn btn-danger">
           <i className="fa fa-plus"></i>
-        </a>
+        </Link>
 
         <button className="btn btn-default" onClick={ selectAll }>
           <i className={ selectBoxStatus }></i>
@@ -118,7 +117,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   applyLabel: applyLabel,
   removeLabel: removeLabel,
   deleteMessages: deleteMessages,
-  toggleComposeForm: toggleComposeForm,
 }, dispatch);
 
 export default connect(
