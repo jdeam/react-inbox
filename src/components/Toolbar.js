@@ -1,4 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+  toggleComposeForm,
+  selectAllMessages,
+  markRead,
+  markUnread,
+  applyLabel,
+  removeLabel,
+  deleteMessages,
+} from '../actions';
 
 const Toolbar = ({
   messages,
@@ -8,8 +19,7 @@ const Toolbar = ({
   applyLabel,
   removeLabel,
   deleteMessages,
-  toggleComposeForm,
-  defaultValue
+  toggleComposeForm
  }) => {
 
   const selectedIds = messages.reduce((arr, message) => {
@@ -65,7 +75,7 @@ const Toolbar = ({
           onChange={ (event) => {
             applyLabel(selectedIds, event.target.value);
           } }
-          value={ defaultValue }
+          value={ "default" }
         >
           <option>Apply label</option>
           <option value="dev">dev</option>
@@ -79,7 +89,7 @@ const Toolbar = ({
           onChange={ (event) => {
             removeLabel(selectedIds, event.target.value);
           } }
-          value={ defaultValue }
+          value={ "default" }
         >
           <option>Remove label</option>
           <option value="dev">dev</option>
@@ -99,4 +109,19 @@ const Toolbar = ({
   );
 };
 
-export default Toolbar;
+const mapStateToProps = (state) => ({ messages: state.messages });
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  selectAll: selectAllMessages,
+  markRead: markRead,
+  markUnread: markUnread,
+  applyLabel: applyLabel,
+  removeLabel: removeLabel,
+  deleteMessages: deleteMessages,
+  toggleComposeForm: toggleComposeForm,
+}, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Toolbar);

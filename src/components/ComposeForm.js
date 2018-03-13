@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { updateFormSubject, updateFormBody, createMessage } from '../actions';
 
 const ComposeForm = ({
   display,
@@ -62,4 +65,18 @@ const ComposeForm = ({
   </form>
 );
 
-export default ComposeForm;
+const mapStateToProps = (state) => ({
+  display: state.composeForm.display,
+  content: state.composeForm.content
+});
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  updateSubject: updateFormSubject,
+  updateBody: updateFormBody,
+  createMessage: createMessage,
+}, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ComposeForm);

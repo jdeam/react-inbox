@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { selectSingleMessage, starSingleMessage } from '../actions';
 
 const MessageList = ({ messages, selectMessage, starMessage }) => (
   <div>
@@ -45,4 +48,14 @@ const Message = ({ message, selectMessage, starMessage }) => (
   </div>
 );
 
-export default MessageList;
+const mapStateToProps = (state) => ({ messages: state.messages });
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  selectMessage: selectSingleMessage,
+  starMessage: starSingleMessage
+}, dispatch);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MessageList);
