@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link, Route, Switch } from 'react-router-dom';
 import {
   selectAll,
   markRead,
   markUnread,
   applyLabel,
   removeLabel,
-  deleteMessages,
-  clearForm
+  deleteMessages
 } from '../actions';
 
 const Toolbar = ({
@@ -19,9 +18,7 @@ const Toolbar = ({
   markUnread,
   applyLabel,
   removeLabel,
-  deleteMessages,
-  clearForm,
-  location
+  deleteMessages
 }) => {
 
   const selectedIds = messages.reduce((arr, message) => {
@@ -47,14 +44,19 @@ const Toolbar = ({
           unread { numUnread===1?"message":"messages" }
         </p>
 
-        <Link
-          to={ location.pathname==="/compose"?"/":"/compose" }
-          className="btn btn-danger"
-          onClick={ location.pathname==="/compose"?clearForm:null }
-        >
-          <i className="fa fa-plus"></i>
-        </Link>
-
+        <Switch>
+          <Route exact path="/compose" render={ () => (
+            <Link to="/" className="btn btn-danger">
+              <i className="fa fa-plus"></i>
+            </Link>
+          )} />
+          <Route path="/" render={ () => (
+            <Link to="/compose" className="btn btn-danger">
+              <i className="fa fa-plus"></i>
+            </Link>
+          )} />
+        </Switch>
+        
         <button className="btn btn-default" onClick={ selectAll }>
           <i className={ selectBoxStatus }></i>
         </button>
@@ -123,8 +125,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   markUnread,
   applyLabel,
   removeLabel,
-  deleteMessages,
-  clearForm
+  deleteMessages
 }, dispatch);
 
 export default withRouter(connect(
