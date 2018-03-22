@@ -22,11 +22,11 @@ const Toolbar = ({
 }) => {
 
   const selectedIds = messages.reduce((arr, message) => {
-     return message.selected?[ ...arr, message.id]:arr;
+     return message.selected ? [ ...arr, message.id ] : arr;
   }, []);
 
   const numUnread = messages.reduce((num, message) => {
-     return !message.read?num+1:num;
+     return !message.read ? num+1 : num;
   }, 0);
 
   let selectBoxStatus;
@@ -34,14 +34,14 @@ const Toolbar = ({
   else if (selectedIds.length < messages.length) selectBoxStatus = "fa fa-minus-square-o";
   else selectBoxStatus = "fa fa-check-square-o";
 
-  const disabledStatus = selectedIds.length?"":"disabled";
+  const disabledStatus = selectedIds.length ? "" : "disabled";
 
   return (
     <div className="row toolbar">
       <div className="col-md-12">
         <p className="pull-right">
           <span className="badge badge">{ numUnread }</span>
-          unread { numUnread===1?"message":"messages" }
+          unread { numUnread === 1 ? "message" : "messages" }
         </p>
 
         <Switch>
@@ -56,7 +56,7 @@ const Toolbar = ({
             </Link>
           )} />
         </Switch>
-        
+
         <button className="btn btn-default" onClick={ selectAll }>
           <i className={ selectBoxStatus }></i>
         </button>

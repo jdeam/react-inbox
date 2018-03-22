@@ -10,8 +10,8 @@ const Message = ({
   return [
     <div
       className={
-        `row message ${ message.read?"read":"unread" }
-        ${ message.selected?"selected":"" }`
+        `row message ${ message.read ? "read" : "unread" }
+        ${ message.selected ? "selected" : "" }`
       }
       key="message"
     >
@@ -20,13 +20,13 @@ const Message = ({
           <div className="col-xs-2">
             <input
               type="checkbox"
-              checked={ message.selected?"checked":"" }
+              checked={ message.selected ? "checked" : "" }
               onChange={ selectMessage }
              />
           </div>
           <div className="col-xs-2">
             <i
-              className={ message.starred?"star fa fa-star":"star fa fa-star-o" }
+              className={ message.starred ? "star fa fa-star" : "star fa fa-star-o" }
               onClick={ starMessage }
               ></i>
           </div>
