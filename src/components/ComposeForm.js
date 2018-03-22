@@ -61,7 +61,8 @@ class ComposeForm extends Component {
                 event.preventDefault();
                 this.props.createMessage(
                   this.props.subject,
-                  this.props.body
+                  this.props.body,
+                  this.props.history
                 );
               } }
             />

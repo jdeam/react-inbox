@@ -138,7 +138,7 @@ export function deleteMessages(ids) {
 }
 
 export const MESSAGE_CREATED = 'MESSAGE_CREATED';
-export function createMessage(subject, body) {
+export function createMessage(subject, body, history) {
   return async (dispatch) => {
     if (!subject || !body) return;
     const message = { subject, body };
@@ -147,6 +147,7 @@ export function createMessage(subject, body) {
     console.log(newMessage);
     dispatch({ type: MESSAGE_CREATED, newMessage });
     dispatch({ type: CLEARED_FORM });
+    history.push('/');
   };
 }
 
